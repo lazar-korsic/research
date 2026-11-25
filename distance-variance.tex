@@ -1,0 +1,336 @@
+\documentclass[11pt,a4paper]{amsart}
+\usepackage[a4paper,margin=30mm]{geometry}
+\usepackage[T1]{fontenc}
+\usepackage{lmodern,amssymb,mathtools,microtype}
+\usepackage[hidelinks]{hyperref}
+\hypersetup{pdftitle={Minimizing the variance of interpoint distances in the plane},pdfauthor={Lazar Korsic}}
+\newtheorem{theorem}{Theorem}[section]
+\newtheorem{lemma}[theorem]{Lemma}
+\newtheorem{corollary}[theorem]{Corollary}
+\theoremstyle{remark}
+\newtheorem{remark}[theorem]{Remark}
+\newcommand{\E}{\mathbb E}
+\newcommand{\R}{\mathbb R}
+\newcommand{\Var}{\operatorname{Var}}
+\newcommand{\ind}{\mathbf{1}}
+\title{Minimizing the variance of interpoint distances in the plane}
+\author{Lazar Korsi\'c}
+\date{November 25, 2026}
+\subjclass[2020]{60D05, 52A40, 26D15}
+\keywords{Geometric probability, interpoint distance, variance, bounded density, negative type}
+\begin{document}
+\begin{abstract}
+We prove that, among measurable planar sets of prescribed positive
+finite area, the disk uniquely minimizes the variance of the distance
+between two independent uniform points. More generally, among all
+planar probability densities bounded above by a given constant, the
+uniform density on a disk uniquely minimizes this variance, up to
+translation and almost-everywhere equality. The proof combines the
+negative type of Euclidean distance, a comparison with the potential
+of a uniform disk, and an elementary universal mean-distance bound.
+\end{abstract}
+\maketitle
+
+\section{Introduction}
+In August 2021 a question on Math Stack Exchange \cite{MSE} asked
+which planar region of prescribed area minimizes the variance of the
+Euclidean distance between two independent uniform points, and
+suggested that a disk is optimal. We establish this assertion without
+any convexity, connectedness, or boundary regularity assumption. In
+fact, the same conclusion holds in a larger class of probability
+measures.
+
+\begin{theorem}\label{th:main}
+Let $M>0$, and let $X,Y$ be independent identically distributed random
+vectors in $\R^2$ whose common probability density $f$ satisfies
+$0\le f\le M$ almost everywhere. Then
+\begin{equation}\label{eq:main}
+ \Var(|X-Y|)\ge \frac{1}{M}
+ \left(\frac1\pi-\frac{16384}{2025\pi^3}\right).
+\end{equation}
+Equality holds if and only if $f=M\ind_B$ almost everywhere for a disk
+$B$ of area $1/M$.
+\end{theorem}
+
+\begin{corollary}\label{cor:set}
+Let $A\subset\R^2$ be Lebesgue measurable with $0<|A|<\infty$,
+and let $X,Y$ be independent uniform points in $A$. Then
+\[
+ \Var(|X-Y|)\ge |A|\left(\frac1\pi-
+ \frac{16384}{2025\pi^3}\right).
+\]
+Equality holds if and only if $A$ agrees almost everywhere with a disk.
+\end{corollary}
+\begin{proof}
+Apply Theorem~\ref{th:main} to $f=\ind_A/|A|$.
+\end{proof}
+
+The related problem of maximizing the mean distance under a constraint
+on the second moment, but with no density bound, was solved by Buja,
+Logan, Reeds and Shepp \cite{BLRS}. Its planar optimizer is the
+projection of a uniform distribution on a sphere in $\R^3$ and has
+an unbounded planar density. This differs from the constrained
+minimization considered here. Mean-distance inequalities for convex
+bodies have also been investigated by Bonnet, Gusakova, Th\"ale and
+Zaporozhets \cite{BGTZ}. The present proof is self-contained; in
+particular, it does not require the sharp bound of \cite{BLRS}.
+
+\paragraph{Provenance and verification status.}
+I asked OpenAI's ChatGPT models to investigate the problem, and suggested
+initial experiments with annuli and a possible approach based on unions
+of small disks. The models developed the proof, its bounded-density
+extension, and the manuscript. This note belongs to the AI-generated
+research collection. The argument has been rechecked by AI but has not
+been independently refereed or formally verified. This draft precedes
+completion of my own review. No claim of priority over all existing
+literature is made.
+
+\section{Preliminaries}
+By translation we may assume that the common law $P$ of $X,Y$ has
+centroid zero, whenever the second moment is finite. Write
+\[
+ I(P)=\int |x|^2\,dP(x),\qquad
+ m(P)=\iint |x-y|\,dP(x)\,dP(y).
+\]
+Independence and the zero centroid give
+\begin{equation}\label{eq:variance}
+ \Var(|X-Y|)=2I(P)-m(P)^2.
+\end{equation}
+It suffices to consider finite second moments. Indeed, if
+$\E|X|^2=\infty$, then for every fixed $y$ the inequality
+$|x|^2\le 2|x-y|^2+2|y|^2$ implies
+$\int |x-y|^2\,dP(x)=\infty$. Hence $\E|X-Y|^2=\infty$ by Tonelli's
+ theorem. Such laws have no finite distance variance; throughout,
+we may take the extended variance of a nonnegative random variable $D$
+to mean $\inf_{c\in\R}\E(D-c)^2$, which is infinite in this case.
+
+\begin{lemma}[Negative type]\label{lem:negative}
+For probability measures $P,Q$ on $\R^2$ with finite first moments,
+let $U_Q(x)=\int |x-y|\,dQ(y)$. Then
+\begin{equation}\label{eq:negative}
+ m(P)-m(Q)\le 2\int U_Q\,d(P-Q).
+\end{equation}
+\end{lemma}
+\begin{proof}
+For a finite signed measure $\sigma$ on $\R$ of total mass zero and
+finite first absolute moment, the identity
+\[
+ |s-t|=\int_{\R}(\ind_{\{s\le z\}}-\ind_{\{t\le z\}})^2\,dz
+\]
+and Fubini's theorem yield
+\[
+ \iint |s-t|\,d\sigma(s)d\sigma(t)
+ =-2\int_{\R}\sigma(({-\infty},z])^2\,dz\le0.
+\]
+The absolute integrability required for Fubini follows by integrating
+$|s-t|$ against $|\sigma|\otimes|\sigma|$.
+For $v\in\R^2$, with $e_\theta=(\cos\theta,\sin\theta)$,
+\[
+ |v|=\frac12\int_0^\pi |v\cdot e_\theta|\,d\theta.
+\]
+Applying the one-dimensional identity to the pushforward of $P-Q$
+under each projection and integrating in $\theta$ proves
+\[
+ \iint |x-y|\,d(P-Q)(x)d(P-Q)(y)\le0.
+\]
+Expanding the left-hand side gives \eqref{eq:negative}.
+\end{proof}
+
+\section{The uniform disk and its potential}
+Let $Q_t$ denote uniform probability measure on the centered disk
+$B_t$ of radius $t>0$. Put
+\[
+ a=\frac{128}{45\pi}.
+\]
+The disk moments are
+\begin{equation}\label{eq:diskmom}
+ I(Q_t)=\frac{t^2}{2},\qquad m(Q_t)=at.
+\end{equation}
+For completeness, the first identity is immediate by polar integration.
+For the second it suffices by scaling to take $t=1$. The overlap area
+of two unit disks with centers distance $r\in[0,2]$ apart is
+\[
+ C(r)=2\arccos(r/2)-\frac r2\sqrt{4-r^2}.
+\]
+The difference of two independent uniform unit-disk points has density
+$C(|z|)/\pi^2$ on $B_2$. Since $C'(r)=-\sqrt{4-r^2}$ for $0<r<2$,
+integration by parts gives
+\[
+ m(Q_1)=\frac2\pi\int_0^2 r^2C(r)\,dr
+ =\frac{2}{3\pi}\int_0^2 r^3\sqrt{4-r^2}\,dr
+ =\frac{128}{45\pi}.
+\]
+
+\begin{lemma}[Disk potential]\label{lem:potential}
+Write $U_{Q_t}(x)=u_t(|x|)$. Then, for all $r\ge0$,
+\begin{equation}\label{eq:radial}
+ u_t'(r)\le \frac rt,\qquad
+ u_t(r)\le \frac{2t}{3}+\frac{r^2}{2t}.
+\end{equation}
+In particular, $r\mapsto u_t(r)-r^2/(2t)$ is nonincreasing.
+\end{lemma}
+\begin{proof}
+The distributional identity $\Delta |x|=1/|x|$ holds on $\R^2$:
+away from zero it follows by differentiation, and the boundary term
+on a circle of radius $\varepsilon$ tends to zero as
+$\varepsilon\downarrow0$. Convolving with the disk density gives
+\[
+ \Delta U_{Q_t}(x)=\frac{1}{\pi t^2}\int_{B_t}\frac{dy}{|x-y|}
+ \le \frac{1}{\pi t^2}\int_{B_t}\frac{dy}{|y|}=\frac2t.
+\]
+For the inequality, translate the domain of integration by $-x$ and
+compare with $B_t$. The part outside $B_t$ has the same area as the
+missing part inside $B_t$; the integrand is at most $1/t$ on the
+former and at least $1/t$ on the latter.
+The second distributional derivatives of $|x|$ are locally integrable
+and have magnitude bounded by a constant times $1/|x|$. Their
+convolutions with the bounded, compactly supported disk density are
+continuous, by continuity of translations in local $L^1$. Thus the
+potential is $C^2$, and radial differentiation is justified. In
+particular $u_t'(0)=0$. For $r>0$ we have
+\[
+ (ru_t'(r))'=r\Delta U_{Q_t}(x)\le 2r/t,
+ \qquad |x|=r.
+\]
+Integration from zero proves the derivative bound. The other bound
+follows by integration once more, using $u_t(0)=2t/3$.
+\end{proof}
+
+\section{Two comparisons}
+Normalize $M=1$ for now. Put $R=\pi^{-1/2}$, $Q=Q_R$, and write
+$I=I(P)$, $m=m(P)$, $I_0=I(Q)$ and $m_0=m(Q)$, with $P$ centered.
+Thus $Q$ has density $\ind_{B_R}$, $I_0=R^2/2$ and $m_0=aR$.
+
+\begin{lemma}[Comparison with the disk]\label{lem:diskcompare}
+If $P$ has density $0\le f\le1$, then
+\begin{equation}\label{eq:inertia}
+ I\ge I_0,
+\end{equation}
+with equality only for $f=\ind_{B_R}$ almost everywhere. Moreover,
+\begin{equation}\label{eq:comparison}
+ I-I_0\ge R(m-m_0).
+\end{equation}
+\end{lemma}
+\begin{proof}
+Let $g=f-\ind_{B_R}$. It has integral zero, is nonpositive inside
+$B_R$, and is nonnegative outside. Consequently
+\[
+ I-I_0=\int (|x|^2-R^2)g(x)\,dx\ge0.
+\]
+The integrand is nonnegative everywhere and strictly positive wherever
+$g\ne0$ off the boundary circle, proving the equality assertion.
+By Lemma~\ref{lem:potential}, the function
+$\phi(r)=u_R(r)-r^2/(2R)$ is nonincreasing. Hence
+\[
+ \int\phi(|x|)g(x)\,dx
+ =\int(\phi(|x|)-\phi(R))g(x)\,dx\le0.
+\]
+Lemma~\ref{lem:negative} now gives
+\[
+ m-m_0\le 2\int u_R(|x|)g(x)\,dx
+ \le \frac{I-I_0}{R},
+\]
+as required.
+\end{proof}
+
+\begin{lemma}[Universal bound]\label{lem:universal}
+Let $P$ be any centered probability measure on $\R^2$ with finite
+second moment. Set $b=4/3-a$. Then
+\begin{equation}\label{eq:universal}
+ m(P)^2\le 4bI(P).
+\end{equation}
+In particular, since $0<b<1/2$,
+\begin{equation}\label{eq:universalV}
+ \Var(|X-Y|)\ge \left(\frac1{2b}-1\right)m(P)^2.
+\end{equation}
+\end{lemma}
+\begin{proof}
+Compare $P$ with $Q_t$ for arbitrary $t>0$. By
+Lemmas~\ref{lem:negative} and \ref{lem:potential} and
+\eqref{eq:diskmom},
+\begin{align*}
+ m(P)&\le 2\int U_{Q_t}(x)\,dP(x)-m(Q_t)\\
+ &\le \frac{I(P)}t+\left(\frac43-a\right)t.
+\end{align*}
+If $I(P)>0$, take $t=\sqrt{I(P)/b}$. If $I(P)=0$, the law is a
+point mass and the bound holds trivially. The stated range of $b$
+follows, for example, from $3<\pi<22/7$. Finally apply
+\eqref{eq:variance}.
+\end{proof}
+
+\begin{remark}
+The universal bound is not sharp. The result of \cite{BLRS} implies
+the stronger planar inequality $m(P)^2\le (\pi^2/6)I(P)$. The weaker
+bound \eqref{eq:universal} already suffices for the argument below.
+\end{remark}
+
+\section{Proof of the main theorem}
+For the normalized problem $M=1$, the disk has variance
+\begin{equation}\label{eq:V0}
+ V_0=2I_0-m_0^2=R^2(1-a^2)
+ =\frac1\pi-\frac{16384}{2025\pi^3}.
+\end{equation}
+Write $V=2I-m^2$. We distinguish three ranges of $m$.
+
+\smallskip\noindent
+\emph{Case 1: $m\le m_0$.}
+By \eqref{eq:inertia},
+\[
+ V\ge 2I_0-m^2\ge 2I_0-m_0^2=V_0.
+\]
+Equality forces $I=I_0$, hence $f=\ind_{B_R}$ almost everywhere.
+
+\smallskip\noindent
+\emph{Case 2: $m_0<m<2R-m_0$.}
+By \eqref{eq:comparison},
+\begin{align*}
+ V-V_0&=2(I-I_0)-(m^2-m_0^2)\\
+ &\ge (m-m_0)(2R-m_0-m)>0.
+\end{align*}
+
+\smallskip\noindent
+\emph{Case 3: $m\ge 2R-m_0$.}
+The universal bound \eqref{eq:universalV} gives
+\[
+ V\ge R^2\left(\frac1{2b}-1\right)(2-a)^2
+ >R^2(1-a^2)=V_0.
+\]
+To verify the strict comparison, multiply the difference of the
+coefficients of $R^2$ by $2b>0$ and substitute $b=4/3-a$:
+\[
+ (1-2b)(2-a)^2-2b(1-a^2)
+ =\frac{-21a^2+50a-28}{3}.
+\]
+The bounds $3<\pi<22/7$ imply $448/495<a<1$. The polynomial
+$p(a)=-21a^2+50a-28$ is increasing on this interval and satisfies
+$p(448/495)=4172/81675>0$.
+
+\smallskip
+Since $a<1$, the three ranges cover every possible $m$. This proves
+the theorem for $M=1$, including the equality assertion. For general
+$M>0$, put $X'=\sqrt M X$, $Y'=\sqrt M Y$. The density of $X'$ is
+$M^{-1}f(x/\sqrt M)\le1$, and
+$\Var(|X'-Y'|)=M\Var(|X-Y|)$. Applying the normalized result and
+scaling the equality case back proves Theorem~\ref{th:main}.
+
+\begin{thebibliography}{9}
+\bibitem{MSE}
+Shaq (Math Stack Exchange username),
+\emph{Minimize the variance of distances between 2 points for planar
+region of given area}, Math Stack Exchange, August 14, 2021.
+\url{https://math.stackexchange.com/questions/4224464/}.
+
+\bibitem{BLRS}
+A.~Buja, B.~F.~Logan, J.~A.~Reeds and L.~A.~Shepp,
+\emph{Inequalities and positive-definite functions arising from a
+problem in multidimensional scaling},
+Ann. Statist. \textbf{22} (1994), no.~1, 406--438.
+\href{https://doi.org/10.1214/aos/1176325376}{doi:10.1214/aos/1176325376}.
+
+\bibitem{BGTZ}
+G.~Bonnet, A.~Gusakova, C.~Th\"ale and D.~Zaporozhets,
+\emph{Sharp inequalities for the mean distance of random points in
+convex bodies}, Adv. Math. \textbf{386} (2021), 107813.
+\href{https://doi.org/10.1016/j.aim.2021.107813}{doi:10.1016/j.aim.2021.107813}.
+\end{thebibliography}
+\end{document}
