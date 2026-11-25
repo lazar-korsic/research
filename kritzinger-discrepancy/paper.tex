@@ -1,0 +1,387 @@
+\documentclass[11pt,a4paper]{amsart}
+\usepackage[a4paper,margin=30mm]{geometry}
+\usepackage[T1]{fontenc}
+\usepackage{lmodern,amssymb,mathtools,microtype}
+\usepackage[hidelinks]{hyperref}
+\hypersetup{pdftitle={Discrepancy bounds for Kritzinger's greedy sequence},pdfauthor={Lazar Korsić}}
+\newtheorem{theorem}{Theorem}[section]
+\newtheorem{lemma}[theorem]{Lemma}
+\newtheorem{corollary}[theorem]{Corollary}
+\newcommand{\norm}[1]{\lVert #1\rVert}
+\newcommand{\ind}{\mathbf{1}}
+\title{Discrepancy bounds for Kritzinger's greedy sequence}
+\author{Lazar Korsi\'c}
+\date{November 23, 2026}
+\subjclass[2020]{11K38}
+\keywords{Star discrepancy, greedy sequences, integrated discrepancy}
+\begin{document}
+\begin{abstract}
+Kritzinger constructed a sequence in the unit interval by choosing each new
+point to minimize the $L^2$ discrepancy of the enlarged set. We prove that
+its unnormalized star discrepancy is at most $\log(2N)+3/2$ for every
+prefix of length $N$, establishing the order assertion in his second
+conjecture. The proof traces averages of the discrepancy backwards through
+the insertions that change one endpoint of a test interval. A second argument
+bounds the height of a chord above the primitive of the discrepancy. It
+gives a uniform bound on that primitive and an $O_p(\sqrt{\log(2N)})$
+bound on the $L^p$ discrepancy for every fixed $1\le p<\infty$.
+The estimates hold for every choice among global minimizers and extend,
+with modified constants, to arbitrary finite initial configurations.
+\end{abstract}
+\maketitle
+
+\section{Introduction}
+For points $x_1,\ldots,x_N$ in $[0,1]$ let
+\[
+ D_N(t)=\#\{i\le N:x_i<t\}-Nt,\qquad H_N(t)=\int_0^t D_N(u)\,du .
+\]
+We use unnormalized discrepancy throughout. Thus a value of $D_N(t)$
+measures the error in the \emph{number} of points in $[0,t)$.
+Kritzinger's Algorithm~2 \cite[\S4.1]{K} starts at $x_1=1/2$ and
+chooses the leftmost minimizer of $\int_0^1 D_{N+1}(t)^2\,dt$ as the next
+point. Equivalently, it minimizes
+\begin{equation}\label{eq:rule}
+ (N+1)x^2-x-2\sum_{i=1}^N\max(x,x_i),\qquad 0\le x\le1 .
+\end{equation}
+We call any choice of a global minimizer a greedy insertion. Starting
+from the empty set gives $x_1=1/2$ by the same rule. Steinerberger
+\cite{S} identified this construction with greedy minimization of the
+quadratic Wasserstein distance to uniform measure. He also proved that
+$\norm{H_N}_\infty\le 2N^{1/3}$ for infinitely many $N$ and asked
+whether a constant bound could hold.
+
+\begin{theorem}\label{th:main}
+For every greedy sequence from the empty set and every $N\ge1$,
+\[
+ \norm{D_N}_\infty\le \log(2N)+\tfrac32,\qquad
+ \norm{H_N}_\infty\le (1+\sqrt5)/4 .
+\]
+For every fixed $1\le p<\infty$ one also has
+$\norm{D_N}_{L^p[0,1]}\ll_p\sqrt{\log(2N)}$.
+\end{theorem}
+Here $\log$ is natural. The first estimate proves the $O(\log N)$
+assertion in Kritzinger's Conjecture~2. His further prediction that
+$\limsup_{N\to\infty}\norm{D_N}_\infty/\log N<1/(3\log 2)$
+remains open. The case $p=2$ gives the growth order sought in
+Conjecture~1; its strict comparison with the symmetrized van der Corput
+sequence also remains open \cite[\S4.1]{K}.
+
+At each insertion the greedy rule bounds certain interval averages
+on both sides of the new point. The difficulty is that these bounds
+apply at different points at different times. Section~\ref{sec:trace}
+fixes a threshold and follows it backwards, shortening its test interval
+whenever it encounters an interior insertion. The accumulated cost is
+logarithmic in the ratio of the initial to the final length.
+Sections~\ref{sec:chord} and~\ref{sec:mom} instead retain both endpoints
+and control the interpolation error of $H_N$. This gives an estimate
+on the frequency of large differences between neighboring cell averages,
+which suffices for the finite moments.
+
+\paragraph{Provenance and author responsibility.}
+I asked OpenAI's ChatGPT models to investigate Kritzinger's problem.
+The models carried out the mathematical investigation, developed the
+proofs, wrote and ran the computational checks, and drafted this
+manuscript. My role is to review the arguments and references and to
+take responsibility for the version I release. This draft precedes
+completion of my review.
+% After personal verification, the author may replace the last two sentences by:
+% I have checked the arguments and references and take responsibility for this version.
+
+\section{What global minimization implies}\label{sec:cone}
+Write $S_m(a,b)=(H_m(b)-H_m(a))/(b-a)$ for the mean discrepancy on
+$[a,b]$, and set $K_m(t)=H_m(t)+t(1-t)/2$. The identity
+\[
+ H_m(t)=\sum_{i\le m}(t-x_i)_+-mt^2/2
+\]
+shows that \eqref{eq:rule} equals $-2K_N(x)-2\sum_{i\le N}x_i$.
+Thus $c=x_m$ maximizes $K_{m-1}$.
+
+\begin{lemma}\label{lem:cone}
+At the insertion of $c=x_m$ one has
+$H_m(u)-H_m(c)\le |u-c|/2$ for every $u$. In particular,
+\begin{equation}\label{eq:slopes}
+ S_m(a,c)\ge-1/2,\qquad S_m(c,b)\le1/2\qquad(a<c<b).
+\end{equation}
+For every canonical-start prefix, $H_m(t)\le t/2$ and
+$H_m(t)-H_m(1)\le(1-t)/2$.
+\end{lemma}
+\begin{proof}
+Adding $(u-c)_+-u^2/2$ to $H_{m-1}(u)$ gives
+\[
+ H_m(u)-H_m(c)=K_{m-1}(u)-K_{m-1}(c)+|u-c|/2 .
+\]
+Maximality proves the first assertions. For the boundary estimate induct
+from $H_0=0$. At $t\le c$ the update is nonpositive. At $t>c$ the cone
+gives $H_m(t)\le H_m(c)+(t-c)/2\le t/2$. Under reflection $y_i=1-x_i$
+the new primitive is $H_m(1-u)-H_m(1)$, by integration. Since $u(1-u)$
+is symmetric, reflection preserves global maximizers and gives the other
+boundary estimate.
+\end{proof}
+
+We recall the rank and separation properties of \cite[Theorems~2--3]{K}
+in a form that includes ties. Sort the $m-1$ old points as $y_i$ and
+put $A_j=\sum_{i=1}^j y_i$, $A_0=0$. The hinge sum is
+$\max_{0\le j<m}(ju-A_j)$. The corresponding quadratics in $K_{m-1}$
+have vertices $(j+1/2)/m$ and vertex heights
+$P_j+1/(8m)$, where $P_j=j(j+1)/(2m)-A_j$.
+All vertices lie in $(0,1)$, so every global maximizer is such a vertex
+with largest $P_j$. Comparison with its neighboring indices yields
+$y_j\le j/m$ and $y_{j+1}\ge(j+1)/m$ whenever the corresponding
+neighbor exists. Every new point is therefore at distance at least
+$1/(2m)$ from every old point. In particular,
+\begin{equation}\label{eq:spacing}
+ |x_i-x_j|\ge 1/(2N)\qquad(1\le i<j\le N)
+\end{equation}
+for the empty start.
+
+\section{Tracing an interval backwards}\label{sec:trace}
+Fix $0\le a<t\le1$. The quantity to control is the excess of the
+discrepancy at the threshold over its average immediately to the left:
+\[
+ R_m(a,t)=D_m(t)-S_m(a,t)
+   =\sum_{\substack{i\le m\\a<x_i<t}}\frac{x_i-a}{t-a}
+       -\frac{m(t-a)}2 .
+\]
+The second equality follows by integrating each counting step. Both
+endpoints are excluded from the sum, including when $t$ is an old point.
+
+\begin{lemma}\label{lem:trace}
+For the empty start,
+$R_N(a,t)\le 1+\max(0,\log(2N(t-a)))$.
+\end{lemma}
+\begin{proof}
+Let $h=t-a$. If $c=x_m$ is outside $(a,t)$, the displayed formula gives
+$R_m(a,t)=R_{m-1}(a,t)-h/2$. If $a<c<t$, put $h'=t-c$. Splitting the
+average at $c$ and applying \eqref{eq:slopes} gives
+\[
+ S_m(c,t)-S_m(a,t)=\frac{c-a}{h}\big[S_m(c,t)-S_m(a,c)\big]
+ \le 1-h'/h .
+\]
+Subtract the two means from the same value $D_m(t)$. On the shortened
+interval $c$ is now its left endpoint, hence
+\[
+ R_m(a,t)\le R_{m-1}(c,t)-h'/2+1-h'/h .
+\]
+Iterate towards time zero. Discarding the nonpositive terms, we obtain
+\[
+ R_N(a,t)\le \sum_{i=1}^k(1-h_i/h_{i-1}),
+\]
+where $h_0=t-a$ and $h_i$ is the length after the $i$th shortening.
+There is no terminal contribution since $R_0=0$.
+
+For $k\le1$ the sum is at most one. Otherwise the last two accepted
+points are $t-h_{k-1}$ and $t-h_k$. By \eqref{eq:spacing},
+$h_{k-1}\ge h_{k-1}-h_k\ge1/(2N)$. Charge the last shortening at
+most one and sum $1-v\le-\log v$ over the others. Their sum is at most
+$\log(h_0/h_{k-1})\le\log(2Nh_0)$. Isolating the last term allows
+$t$ to lie arbitrarily close to a point.
+\end{proof}
+Take $a=0$. Lemma~\ref{lem:cone} bounds the initial-interval mean by
+$1/2$, which proves the upper estimate on $D_N(t)$ in
+Theorem~\ref{th:main}. Off the support, the discrepancy of the reflected
+configuration at $1-t$ is $-D_N(t)$. This gives the lower estimate.
+Limits from the complement of the support give both one-sided limits
+at each jump, and $D_N(0)=D_N(1)=0$ for the empty start.
+
+\section{A bound on chord heights}\label{sec:chord}
+For $a<t<b$ set $p=t-a$, $q=b-t$ and write
+\[
+ G_m(a,t,b)=\frac{qH_m(a)+pH_m(b)}{p+q}-H_m(t).
+\]
+\begin{theorem}\label{th:chord}
+For all such triples and all greedy prefixes from the empty set,
+$G_m(a,t,b)\le\sqrt{pq}$.
+\end{theorem}
+\begin{proof}
+Induct from $G_0=0$. When $c=x_m$ lies outside $(a,b)$, the new hinge
+is affine on $[a,b]$. The quadratic update gives
+$G_m=G_{m-1}-pq/2$ there. For an interior insertion, applying the cone
+at both endpoints yields
+\begin{equation}\label{eq:chordbirth}
+ G_m(a,c,b)\le (c-a)(b-c)/(b-a).
+\end{equation}
+This suffices if $c=t$. If $a<c<t$, interpolate first at $c$ to get
+\[
+ G_m(a,t,b)=G_m(c,t,b)+\frac{q}{b-c}G_m(a,c,b).
+\]
+Put $p'=t-c$. The insertion is an endpoint of the first interval, so
+the first term is at most $\sqrt{p'q}-p'q/2$. Use
+\eqref{eq:chordbirth} for the second term. It remains to check
+\[
+ \sqrt{p'q}+\frac{q(p-p')}{p+q}\le\sqrt{pq}.
+\]
+Indeed $\sqrt q/(\sqrt p+\sqrt{p'})\ge \sqrt q/(2\sqrt p)
+\ge q/(p+q)$. Multiplying by $p-p'$ proves the inequality.
+The case $t<c<b$ follows by reflection.
+\end{proof}
+
+For $I=[a,b]$ define the tent
+$\psi_I(x)=\max(0,\min(x-a,b-x))/(b-a)$. At its midpoint $t$,
+the hinge formula gives
+\[
+ Q_N(I):=\sum_{i\le N}\psi_I(x_i)-N|I|/4
+       =2G_N(a,t,b)/|I|\le1 .
+\]
+At $a=0$, $b=1$, Theorem~\ref{th:chord} gives
+$H_N(t)\ge tH_N(1)-\sqrt{t(1-t)}$.
+Lemma~\ref{lem:cone} gives $|H_N(1)|\le1/2$ and $H_N(t)\le t/2$.
+Writing $u=2t-1$, Cauchy--Schwarz gives
+\[
+ t/2+\sqrt{t(1-t)}=(1+u+2\sqrt{1-u^2})/4\le(1+\sqrt5)/4 .
+\]
+This proves the primitive estimate in Theorem~\ref{th:main}.
+
+\section{The finite moments}\label{sec:mom}
+Partition $[0,1]$ into $M$ equal cells. Write $s_i$ for the mean of
+$D_N$ on cell $i$, and $z_i=s_{i+1}-s_i$ for $1\le i<M$.
+The midpoint estimate gives $z_i\le2$.
+A negative jump has no analogous pointwise bound from
+Theorem~\ref{th:chord}. The following estimate on its frequency is sufficient.
+\begin{lemma}\label{lem:tail}
+For $A>0$, $\#\{i:z_i<-A\}/M\le\min(1,2^{(5-A)/4})$.
+\end{lemma}
+\begin{proof}
+For any interval split into lengths $p,q$, its mean minus its left
+mean is $G_N/p$, and its right mean minus its mean is $G_N/q$.
+Thus extending a cell to the right by at most its length increases its
+mean by at most one. Extending it to the left by at most its length
+decreases its mean by at most one. For a run of $m$ cells, grow its
+first cell by successive doublings towards the right, stopping at the
+end of the run. Repeat from its last cell towards the left. This proves
+\[
+ s_{\rm last}-s_{\rm first}\le 2\lceil\log_2 m\rceil .
+\]
+Cut the row at the $k$ jumps below $-A$. If $k>0$, the $k+1$ resulting
+run lengths sum to $M$. The boundary estimates give $s_M-s_1\ge-1$.
+Summing the rises along runs and the drops across cuts, then using
+concavity of the logarithm, yields
+\[
+ -1\le-kA+2(k+1)\big[1+\log_2(M/(k+1))\big].
+\]
+Divide by $k$ and use $(k+1)/k\le2$. This gives
+$A\le5+4\log_2(M/(k+1))$, as required. The case $k=0$ is immediate.
+\end{proof}
+Integrating the tail against $pA^{p-1}\,dA$ with $p=d\ge1$, and using $z_i\le2$,
+shows that $M^{-1}\sum_{i<M}|z_i|^d\le C_d$ uniformly in $M,N$.
+
+Let $U_j$ be the function of dyadic cell means at level $j$. On a
+parent cell the two child means are $U_j-V_j$ and $U_j+V_j$, where
+$V_j$ is half the right-minus-left jump. In the grid of $M=2^{j+1}$
+cells these are precisely the jumps of odd index. Hence
+\[
+ \int_0^1 |V_j|^d=\frac{2}{M}\sum_{i\ {\rm odd},\,i<M}|z_i/2|^d
+ \le 2^{1-d} C_d .
+\]
+For $d=2$ the two signs cancel the cross term, and each level adds
+at most a constant to $\norm{U_j}_2^2$. For an even integer $d=2r$,
+put $u=\norm{U_j}_d$ and $v=\sup_j\norm{V_j}_d$. Average the
+binomial expansions on the two children and apply H\"older's inequality
+on the parents. Only even powers of $V_j$ remain, so
+\[
+ \norm{U_{j+1}}_d^d
+ \le\sum_{\ell=0}^r\binom{2r}{2\ell}u^{2r-2\ell}v^{2\ell}
+ \le (u^2+2^{2r}v^2)^r .
+\]
+The last bound follows coefficient by coefficient: for $\ell\ge1$,
+$\binom{2r}{2\ell}\le 2^{2r}\le\binom r\ell 2^{2r\ell}$.
+Taking the $r$th root and summing gives
+$\norm{U_L}_d^2\le1/4+L2^{2r}v^2$.
+Take $L=\lceil\log_2(4N)\rceil$. By \eqref{eq:spacing} the interior
+of each final cell contains at most one point, so the essential
+oscillation there is at most $1+N2^{-L}\le5/4$.
+Consequently $\norm{D_N-U_L}_\infty\le5/4$ in essential supremum.
+For any fixed $1\le p<\infty$, take an even $d\ge p$ and use
+$\norm{D_N}_p\le\norm{D_N}_d$. This completes Theorem~\ref{th:main}.
+
+\section{Initial configurations and quadrature}
+\begin{corollary}
+Start with any list of $s$ points in $[0,1]$, allowing repeats and
+endpoints, and extend it by global greedy insertions. Put
+$B=\max(1/2,\norm{D_s}_\infty)$ and $C=\max(1,B)$. For $N\ge\max(1,s)$,
+\[
+ \norm{D_N}_\infty\le3B+1+\log(2N),\quad
+ \norm{H_N}_\infty\le B+C/2,
+\]
+and, for every fixed $1\le p<\infty$,
+\[
+ \norm{D_N}_p\ll_{s,p}\sqrt{\log(2N)}.
+\]
+\end{corollary}
+\begin{proof}
+At time $s$ the boundary means in either orientation are at most $B$
+at the left endpoint. The induction of Lemma~\ref{lem:cone} propagates
+this since $B\ge1/2$. Stop the backward trace at $s$, where the final
+excess is at most $2B$. All accepted points in the trace are post-seed
+insertions, for which the spacing argument still applies. Adding the
+boundary mean gives the star bound. Reflection holds almost everywhere;
+inward limits recover the required endpoint convention even with atoms
+at $0$ or $1$.
+
+At time $s$, $G_s$ equals $pq/(p+q)$ times the difference of the right
+and left means, so $G_s\le 2Bpq/(p+q)\le C\sqrt{pq}$. The induction
+of Theorem~\ref{th:chord} preserves this bound since $C\ge1$.
+On $[0,1]$ the chord estimate and $|H_N(1)|\le B$ give the primitive
+bound. Apply the proof of Lemma~\ref{lem:tail} to means divided by $C$:
+the rise estimate is unchanged and the endpoint difference is at least
+$-2B/C\ge-2$. This replaces 5 by 6 in its exponent numerator.
+The moment argument carries through, with final-cell oscillation at most
+$s+1+1/4$ because only the post-seed points require separation.
+\end{proof}
+
+For the empty start the cone also has a quadrature consequence. Write
+$E(f)=\sum_{i\le N} f(x_i)-N\int_0^1 f$. Then $|E(x)|=|H_N(1)|\le1/2$
+for the identity function and
+$E(|x-t|)=2H_N(t)-H_N(1)\le1/2$ by the two boundary bounds.
+Every convex $L$-Lipschitz function has the representation
+$f(x)=b+ax+\int_{(0,1)}|x-t|\,d\mu(t)$, where $\mu=f''/2\ge0$
+in the distributional sense and $a$ is the average of the two endpoint
+slopes. Since $|a|+\mu((0,1))\le L$, it follows that $E(f)\le L/2$.
+
+The same primitive gives an exact balance for the squared discrepancy.
+Let $\mathcal E_m=\int_0^1D_m^2$, $M_m=\max K_m$ and
+$A_m=\int_0^1K_m$. Then
+\[
+ \mathcal E_{m+1}-\mathcal E_m=\tfrac16-2(M_m-A_m).
+\]
+Indeed the increment in $D_m(u)$ is $\ind_{\{u>c\}}-u$ at
+$c=x_{m+1}$. Its squared integral is $c^2-c+1/3$, and integration by
+parts gives $\int_0^1D_m(u)(\ind_{\{u>c\}}-u)\,du=\int_0^1 H_m-H_m(c)$.
+Substitution of $K_m(c)=M_m$ gives the formula.
+
+\section{A sharper tent bound}
+The conjectured inequality $-1\le Q_N(I)\le1/2$ on dyadic intervals
+would sharpen the one-sided estimate of Section~\ref{sec:chord}.
+There is a finite test for an even stronger upper bound. Extend the tent
+to arbitrary center $z\in\mathbb R$ and radius $r>0$ by setting
+\[
+ T(z,r)=\tfrac12\sum_{i\le N}(1-|x_i-z|/r)_+-Nr/2 .
+\]
+Then $T(z,r)\le1/2$ for all $z,r$ if and only if every consecutive
+block $J$ of $k\ge1$ sorted points satisfies
+\[
+ 4N\sum_{x\in J}|x-\operatorname{med}(J)|\ge(k-1)^2 .
+\]
+Indeed, twice the tent value is the maximum over subsets $J$ of
+$|J|-\sum_{x\in J}|x-z|/r-Nr$. For fixed nonempty $J$ choose a median
+to minimize the deviation sum $b_J$; the supremum over radii is then
+$|J|-2\sqrt{Nb_J}$, including $b_J=0$ by a limit. The empty subset
+has supremum zero. At each size $k$ the least deviation is attained on
+a consecutive block: take the $k$ points nearest an optimizing median
+and then optimize their median. This proves the equivalence.
+
+Exact integer comparisons in the accompanying code verified the block
+inequality for every canonical prefix through $N=512$ and every global
+tie history through $N=24$ (1,798 distinct terminal configurations).
+The proof of Theorem~\ref{th:main} is independent of these finite checks.
+
+\begin{thebibliography}{9}
+\bibitem{K} R.~Kritzinger, Uniformly distributed sequences generated by a
+greedy minimization of the $L_2$ discrepancy, \emph{Moscow J. Combin.
+Number Theory} \textbf{11} (2022), 215--236.
+\href{https://arxiv.org/abs/2109.06298}{arXiv:2109.06298}.
+\bibitem{S} S.~Steinerberger, On combinatorial properties of greedy
+Wasserstein minimization, \emph{J. Math. Anal. Appl.} \textbf{532}
+(2024), article 127940.
+\href{https://arxiv.org/abs/2207.08043}{arXiv:2207.08043}.
+\end{thebibliography}
+\end{document}
